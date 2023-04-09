@@ -1,77 +1,48 @@
-/* I. Given an unsorted array of positive integers, design an algorithm and implement it using a program to find whether there are any duplicate elements in the array or not. (use sorting) (Time Complexity = O(n log n)) */
+/*
+Given an unsorted array of integers, design an algorithm and implement it using a program to find Kth smallest or largest element in the array. (Worst case Time Complexity = O(n))
+*/
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <queue>
 using namespace std;
 
-void merge(int nums[], int start, int end)
+// largest : minHeap
+int kthlargest(int nums[], int k, int num)
 {
-    int mid = (start + end)/2;
+    priority_queue<int> minHeap;
 
-    int len1 = mid - start + 1;
-    int len2 = end - start;
-
-    int *first = new int[len1];
-    int *second = new int[len2];
-
-    int maxIndex = start;
-    for(int i = 0; i < len1; i++)
+    for(int i = 0; i < num; i++)
     {
-        first[i] = nums[maxIndex++];
+        minHeap.push(nums[i]);
     }
-
-    maxIndex = mid + 1;
-    for(int i = 0; i < len2; i++)
+    while(--k)
     {
-        second[i] = nums[maxIndex++];
+        minHeap.pop();
     }
-
-    int index1 = 0;
-    int index2 = 0;
-    maxIndex = start;
-
-    while(index1 < len1 && index2 < len2)
-    {
-        if(first[index1] < second[index2])
-        {
-            nums[maxIndex++] = first[index1++];
-        }
-        else
-        {
-            nums[maxIndex++] = second[index2++];
-        }
-    }
-
-    while(index1 < len1)
-    {
-        nums[maxIndex++] = first[index1++];
-    }
-
-    while(index2 < len2)
-    {
-        nums[maxIndex++] = second[index2++];
-    }
-
-    delete [] first;
-    delete [] second;
+    return minHeap.top();
 }
 
-void mergeSort(int nums[], int start, int end)
+// smallest : maxHeap
+int kthSmallest(int nums[], int k, int num)
 {
-    if(start >= end)
+    priority_queue<int> maxHeap;
+
+    for(int i = 0; i < num; i++)
     {
-        return;
+        maxHeap.push(nums[i]);
+        if(maxHeap.size() > k)
+        {
+            maxHeap.pop();
+        }
     }
-    int mid = (start + end)/2;
-    mergeSort(nums, start, mid);
-    mergeSort(nums, mid+1, end);
+    
 
-    merge(nums, start, end);
+    return maxHeap.top();
+    
 }
-
 int main()
 {
-    bool flag = false;
-    int testcase, count = 0;
+    int testcase, val, k;
     int num, nums[20], container[20];
 
     cout << "Enter the total number of testcase: ";
@@ -88,23 +59,21 @@ int main()
             cin >> nums[i];
         }
 
-        mergeSort(nums, 0, num);
-        
-        for(int i = 0; i < num - 1; i++)
-        {
-            if(nums[i] == nums[i+1])
-            {
-                flag = true;
-            }
-        }
+        cout << "Enter: kth smallest/kth largest(1/0): " << endl;
+        cin >> val;
 
-        if(flag == true)
+
+        if(val == 1)
         {
-            cout << "Duplicate element is Present...";
+            cout << "Enter the value of kth: ";
+            cin >> k;
+            cout << "the kth smallest element is: " << kthSmallest(nums, k, num);
         }
         else
         {
-            cout << "Duplicate element is not Present...";
+            cout << "Enter the value of kth: ";
+            cin >> k;
+            cout << "the kth largest element is: " << kthlargest(nums, k, num);
         }
     }
 
