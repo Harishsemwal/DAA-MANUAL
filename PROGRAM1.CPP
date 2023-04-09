@@ -1,83 +1,54 @@
-// Given an unsorted array of integers, design an algorithm and implement it using a program to sort an array of elements by dividing the array into two subarrays and combining these subarrays after  sorting each one of them. Your program should also find number of comparisons and inversions during sorting the array. */
-#include <bits/stdc++.h>
+/* I. Given an unsorted array of alphabets containing duplicate elements. Design an algorithm and implement it using a program to find which alphabet has maximum number of occurrences and print it. (Time Complexity = O(n)) (Hint: Use counting sort) */
+#include <iostream>
 using namespace std;
 
-void merge(int nums[], int start, int end, int compare[])
+void countingSort(int arr[], int num)
 {
-    static int countCompare;
-    int mid = (start + end)/2;
-
-    int len1 = mid - start + 1;
-    int len2 = end - start;
-
-    int *first = new int[len1];
-    int *second = new int[len2];
-
-    int maxIndex = start;
-    for(int i = 0; i < len1; i++)
+    int maxi = -1;
+    for(int i = 0; i < num; i++)
     {
-        first[i] = nums[maxIndex++];
-    }
-
-    maxIndex = mid + 1;
-    for(int i = 0; i < len2; i++)
-    {
-        second[i] = nums[maxIndex++];
-    }
-
-    int index1 = 0;
-    int index2 = 0;
-    maxIndex = start;
-
-    while(index1 < len1 && index2 < len2)
-    {
-        if(first[index1] < second[index2])
+        if(arr[i] > maxi)
         {
-            nums[maxIndex++] = first[index1++];
-            countCompare++;
-        }
-        else
-        {
-            nums[maxIndex++] = second[index2++];
-            countCompare++;
+            maxi = arr[i];
         }
     }
 
-    while(index1 < len1)
+    cout <<"maxi: " << maxi << endl;
+
+    int count[maxi];
+    int postion[num];
+    int output[num];
+
+    for(int i = 0; i < maxi; i++)
     {
-        nums[maxIndex++] = first[index1++];
-        countCompare++;
+        count[i] = 0;
     }
 
-    while(index2 < len2)
+    for(int i = 0; i < num; i++)
     {
-        nums[maxIndex++] = second[index2++];
-        countCompare++;
+        count[arr[i]]++;
     }
-    compare[0] = countCompare;
-    delete [] first;
-    delete [] second;
-}
 
-void mergeSort(int nums[], int start, int end, int compare[])
-{
-    if(start >= end)
+    for(int i = 1; i < num; i++)
     {
-        return;
+        count[i] = count[i] + count[i-1];
     }
-    int mid = (start + end)/2;
-    mergeSort(nums, start, mid, compare);
-    mergeSort(nums, mid+1, end, compare);
+    for(int i = 0; i < num; i++)
+    {
+        output[--postion[arr[i]]] = arr[i];
+    }
 
-    merge(nums, start, end, compare);
+    for(int i = 0; i < num ;i++)
+    {
+        arr[i] = count[i];
+    }
+
 }
 
 int main()
 {
-    bool flag = false;
-    int compare[0];
     int testcase, count = 0;
-    int num, nums[20], container[20];
+    int num, nums[20];
 
     cout << "Enter the total number of testcase: ";
     cin >> testcase;
@@ -92,16 +63,13 @@ int main()
         {
             cin >> nums[i];
         }
-        mergeSort(nums, 0, num, compare);
+
+        countingSort(nums, num);
 
         cout << "the sorted elements is: " << endl;
         for(int i = 0; i < num; i++)
         {
             cout << nums[i] << " ";
         }
-        cout << endl << "number of Comparisions: "<< compare[0] << endl;
-
     }
-
-    return 0;
 }

@@ -1,65 +1,39 @@
-// Given an unsorted array of integers, design an algorithm and implement it using a program to sort an array of elements by partitioning the array into two subarrays based on a pivot element such that one of the sub array holds values smaller than the pivot element while another subarray holds values greater than the pivot element. Pivot element should be selected randomly from the array. Your program should also find number of comparisons and swaps required for sorting the array */
+/* Given an unsorted array of integers, design an algorithm and implement it using a program to find whether two elements exist such that their sum is equal to the given key element. (Time
+Complexity = O(n log n)) */
 
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
 
-int partition(int nums[], int start, int end, int swapCount[])
+bool findPairs(int nums[], int num, int key, int store[])
 {
-    int pivot = nums[start];
-    int count = 0;
-    static int countSwap;
-    for(int i = start + 1; i <=end; i++)
+    int left = 0; 
+    int right = num - 1;
+
+    while(left < right)
     {
-        if(nums[i] <= pivot)
+        sort(nums, nums + num);
+
+        if(nums[left] + nums[right] == key)
         {
-            count++;
+            store[0] = nums[left];
+            store[1] = nums[right];
+            return true;
+        }
+        else if(nums[left]+ nums[right] < key)
+        {
+            left++;
+        }
+        else
+        {
+            right--;
         }
     }
-    int pivotIndex = count + start;
-    swap(nums[start], nums[pivotIndex]);
-    countSwap++;
-
-    int i = start;
-    int j = end;
-
-    while(i < pivotIndex && j > pivotIndex)
-    {
-        while(nums[i] < pivotIndex)
-        {
-            i++;
-        }
-
-        while(nums[j] > pivotIndex)
-        {
-            j--;
-        }
-
-        if(i < pivotIndex && j > pivotIndex)
-        {
-            swap(nums[i++], nums[j--]);
-            countSwap++;
-        }
-    }
-    swapCount[0] = countSwap;
-    return pivotIndex;
 }
 
-void QuickSort(int nums[], int start, int end, int swapCount[])
-{
-    if(start >= end)
-    {
-        return;
-    }
-
-    int P = partition(nums, start, end, swapCount);
-    QuickSort(nums, start, P, swapCount);
-    QuickSort(nums, P+1, end, swapCount);
-}
 int main()
 {
-    int testcase, count = 0;
-    int swapCount[0];
-    int num, nums[20], container[20];
+    int testcase;
+    int num, nums[20];
 
     cout << "Enter the total number of testcase: ";
     cin >> testcase;
@@ -75,14 +49,20 @@ int main()
             cin >> nums[i];
         }
 
-        QuickSort(nums, 0, num-1, swapCount);
+        int key, store[2];
+        cout << "Enter the key element: ";
+        cin >> key;
 
-        cout << "The sorted elements is: " << endl;
-        for(int i = 0; i < num; i++)
+        bool ans = findPairs(nums, num, key, store);
+
+        if(ans)
         {
-            cout << nums[i] << " ";
+        cout << "pair: " << store[0] <<" " << store[1] << endl;
         }
-        cout << endl << "the element will be sorted after " << swapCount[0] << " number of Swaps..." << endl;
+        else
+        {
+            cout << "Pairs not exits..." << endl;
+        }
 
         return 0;
     }

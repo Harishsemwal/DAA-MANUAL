@@ -1,81 +1,68 @@
-/*
-Given an unsorted array of integers, design an algorithm and implement it using a program to find Kth smallest or largest element in the array. (Worst case Time Complexity = O(n))
-*/
-
-#include <iostream>
-#include <queue>
+/* You have been given two sorted integer arrays of size m and n. Design an algorithm and implement it using a program to find list of elements which are common to both. (Time Complexity = O(m+n)) */
+#include <iostream> 
 using namespace std;
 
-// largest : minHeap
-int kthlargest(int nums[], int k, int num)
+void findCommonElement(int nums1[], int num1, int nums2[], int num2)
 {
-    priority_queue<int> minHeap;
+    int i = 0,j = 0, k = 0;
+    int comn[num1 + num2];
 
-    for(int i = 0; i < num; i++)
+    while(i < num1 && j < num2)
     {
-        minHeap.push(nums[i]);
-    }
-    while(--k)
-    {
-        minHeap.pop();
-    }
-    return minHeap.top();
-}
-
-// smallest : maxHeap
-int kthSmallest(int nums[], int k, int num)
-{
-    priority_queue<int> maxHeap;
-
-    for(int i = 0; i < num; i++)
-    {
-        maxHeap.push(nums[i]);
-        if(maxHeap.size() > k)
+        if(nums1[i] == nums2[j])
         {
-            maxHeap.pop();
+            comn[k++] = nums1[i];
+            i++;
+            j++;
+        }
+        else if(nums1[i] < nums2[i])
+        {
+            i++;
+        }
+        else
+        {
+            j++;
         }
     }
-    
 
-    return maxHeap.top();
-    
+    cout << "the common elements is: " << endl;
+    for(int i = 0; i < k; i++)
+    {
+        cout << comn[i] << " ";
+    }
 }
+
+
 int main()
 {
-    int testcase, val, k;
-    int num, nums[20], container[20];
+    int testcase, count = 0;
+    int num1, num2, nums1[20], nums2[20];
 
     cout << "Enter the total number of testcase: ";
     cin >> testcase;
 
     while(testcase--)
     {
-        cout << "Enter the number of element: ";
-        cin >> num;
+        cout << "Enter the number of element in array1: ";
+        cin >> num1;
 
-        cout << "Enter the elements: ";
-        for(int i = 0; i < num; i++)
+        cout << "Enter the first array elements: ";
+        for(int i = 0; i < num1; i++)
         {
-            cin >> nums[i];
+            cin >> nums1[i];
         }
 
-        cout << "Enter: kth smallest/kth largest(1/0): " << endl;
-        cin >> val;
+        cout << "Enter the number of element in array2: ";
+        cin >> num2;
 
+        cout << "Enter the second array elements: ";
+        for(int i = 0; i < num2; i++)
+        {
+            cin >> nums2[i];
+        }
 
-        if(val == 1)
-        {
-            cout << "Enter the value of kth: ";
-            cin >> k;
-            cout << "the kth smallest element is: " << kthSmallest(nums, k, num);
-        }
-        else
-        {
-            cout << "Enter the value of kth: ";
-            cin >> k;
-            cout << "the kth largest element is: " << kthlargest(nums, k, num);
-        }
+        findCommonElement(nums1, num1, nums2, num2);
+
+        return 0;
     }
-
-    return 0;
 }
