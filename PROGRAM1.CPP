@@ -1,77 +1,47 @@
-// Given a sorted array of positive integers containing few duplicate elements, design an algorithm and implement it using a program to find whether the given key element is present in the array or not. If present, then also find the number of copies of given key. (Time Complexity = O(log n)).
+/* Given an unsorted array of integers, design an algorithm and a program to sort the array using insertion sort. Your program should be able to find number of comparisons and shifts ( shifts - total number of times the array elements are shifted from their place) required for sorting the array. */
 
 #include <iostream>
 using namespace std;
 
-int binarySearchFirst(int arr[], int low, int high, int key)
-{
-    int result = -1;
-    while (low <= high)
-    {
-        int mid = low + (high - low) / 2;
-        if (arr[mid] == key)
-        {
-            result = mid;
-            high = mid - 1;
-        }
-        else if (arr[mid] < key)
-        {
-            low = mid + 1;
-        }
-        else
-        {
-            high = mid - 1;
-        }
-    }
-    return result;
-}
-
-int binarySearchLast(int arr[], int low, int high, int key)
-{
-    int result = -1;
-    while (low <= high)
-    {
-        int mid = low + (high - low) / 2;
-        if (arr[mid] == key)
-        {
-            result = mid;
-            low = mid + 1;
-        }
-        else if (arr[mid] < key)
-        {
-            low = mid + 1;
-        }
-        else
-        {
-            high = mid - 1;
-        }
-    }
-    return result;
-}
-
 int main()
 {
-    int n, key;
-    cout << "Enter the number of elements in the array: ";
-    cin >> n;
-    int arr[n];
-    cout << "Enter the elements of the array: ";
-    for (int i = 0; i < n; i++)
+    int testcase, count = 0;
+    int num, nums[20];
+
+    cout << "Enter the total number of testcase: ";
+    cin >> testcase;
+
+    while(testcase--)
     {
-        cin >> arr[i];
+        cout << "Enter the number of element: ";
+        cin >> num;
+
+        cout << "Enter the elements: ";
+        for(int i = 0; i < num; i++)
+        {
+            cin >> nums[i];
+        }
+
+        //insertion sort
+        int i, j;
+        for(i = 1; i < num; i++)
+        {
+            int temp = nums[i];
+            for(j = i-1; j>=0 && temp < nums[j]; j--)
+            {
+                nums[j+1] = nums[j];
+                count++;
+            }
+            nums[j+1] = temp;
+        }
+
+        cout << "The elements will be sorted after ("<< count <<") number of comparisions..." << endl;
+        cout << "Sorted elements is: " << endl;
+        for(int i = 0; i < num; i++)
+        {
+            cout << nums[i] << " ";
+        }
+
+        return 0;
     }
-    cout << "Enter the key element: ";
-    cin >> key;
-    int first = binarySearchFirst(arr, 0, n - 1, key);
-    if (first == -1)
-    {
-        cout << "Key element not found in the array" << endl;
-    }
-    else
-    {
-        int last = binarySearchLast(arr, 0, n - 1, key);
-        int count = last - first + 1;
-        cout << "Key element found " << count << " times in the array" << endl;
-    }
-    return 0;
 }

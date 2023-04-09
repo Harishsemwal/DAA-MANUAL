@@ -1,35 +1,112 @@
-/* Given an array of nonnegative integers, design an algorithm and a program to count the number of pairs of integers such that their difference is equal to a given key, K. */
-#include <iostream>
+/* I. Given an unsorted array of positive integers, design an algorithm and implement it using a program to find whether there are any duplicate elements in the array or not. (use sorting) (Time Complexity = O(n log n)) */
+
+#include <bits/stdc++.h>
 using namespace std;
 
-int main()
+void merge(int nums[], int start, int end)
 {
-    int count = 0, target;
-    int num, nums[20];
+    int mid = (start + end)/2;
 
-    cout << "Enter the number of element: ";
-    cin >> num;
+    int len1 = mid - start + 1;
+    int len2 = end - start;
 
-    cout << "Enter the elements: ";
-    for(int i = 0; i < num; i++)
+    int *first = new int[len1];
+    int *second = new int[len2];
+
+    int maxIndex = start;
+    for(int i = 0; i < len1; i++)
     {
-        cin >> nums[i];
+        first[i] = nums[maxIndex++];
     }
 
-    cout << "Enter the target Value: ";
-    cin >> target; 
-
-    for(int i = 0; i < num; i++)
+    maxIndex = mid + 1;
+    for(int i = 0; i < len2; i++)
     {
-        for(int j = i+1; j < num; j++)
+        second[i] = nums[maxIndex++];
+    }
+
+    int index1 = 0;
+    int index2 = 0;
+    maxIndex = start;
+
+    while(index1 < len1 && index2 < len2)
+    {
+        if(first[index1] < second[index2])
         {
-            if(nums[i] + nums[j] == target)
-            {
-                count++;
-            }
+            nums[maxIndex++] = first[index1++];
+        }
+        else
+        {
+            nums[maxIndex++] = second[index2++];
         }
     }
 
-    cout << "total ("<< count << ") number number of pair exits....";
+    while(index1 < len1)
+    {
+        nums[maxIndex++] = first[index1++];
+    }
+
+    while(index2 < len2)
+    {
+        nums[maxIndex++] = second[index2++];
+    }
+
+    delete [] first;
+    delete [] second;
+}
+
+void mergeSort(int nums[], int start, int end)
+{
+    if(start >= end)
+    {
+        return;
+    }
+    int mid = (start + end)/2;
+    mergeSort(nums, start, mid);
+    mergeSort(nums, mid+1, end);
+
+    merge(nums, start, end);
+}
+
+int main()
+{
+    bool flag = false;
+    int testcase, count = 0;
+    int num, nums[20], container[20];
+
+    cout << "Enter the total number of testcase: ";
+    cin >> testcase;
+
+    while(testcase--)
+    {
+        cout << "Enter the number of element: ";
+        cin >> num;
+
+        cout << "Enter the elements: ";
+        for(int i = 0; i < num; i++)
+        {
+            cin >> nums[i];
+        }
+
+        mergeSort(nums, 0, num);
+        
+        for(int i = 0; i < num - 1; i++)
+        {
+            if(nums[i] == nums[i+1])
+            {
+                flag = true;
+            }
+        }
+
+        if(flag == true)
+        {
+            cout << "Duplicate element is Present...";
+        }
+        else
+        {
+            cout << "Duplicate element is not Present...";
+        }
+    }
+
     return 0;
 }
