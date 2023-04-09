@@ -1,43 +1,77 @@
-/* Given an array of nonnegative integers, design a linear algorithm and implement it using a program to find whether given key element is present in the array or not. Also, find total number of comparisons for each input case. (Time Complexity = O(n), where n is the size of input). */
+// Given a sorted array of positive integers containing few duplicate elements, design an algorithm and implement it using a program to find whether the given key element is present in the array or not. If present, then also find the number of copies of given key. (Time Complexity = O(log n)).
 
 #include <iostream>
 using namespace std;
 
+int binarySearchFirst(int arr[], int low, int high, int key)
+{
+    int result = -1;
+    while (low <= high)
+    {
+        int mid = low + (high - low) / 2;
+        if (arr[mid] == key)
+        {
+            result = mid;
+            high = mid - 1;
+        }
+        else if (arr[mid] < key)
+        {
+            low = mid + 1;
+        }
+        else
+        {
+            high = mid - 1;
+        }
+    }
+    return result;
+}
+
+int binarySearchLast(int arr[], int low, int high, int key)
+{
+    int result = -1;
+    while (low <= high)
+    {
+        int mid = low + (high - low) / 2;
+        if (arr[mid] == key)
+        {
+            result = mid;
+            low = mid + 1;
+        }
+        else if (arr[mid] < key)
+        {
+            low = mid + 1;
+        }
+        else
+        {
+            high = mid - 1;
+        }
+    }
+    return result;
+}
+
 int main()
 {
-    bool flag = false;
-    int count = 0, search, num, arr[20];
-    cout << "Enter the number of element: ";
-    cin >> num;
-
-    cout << "Enter the nonnegative integers: ";
-    for(int i = 0; i < num; i++)
+    int n, key;
+    cout << "Enter the number of elements in the array: ";
+    cin >> n;
+    int arr[n];
+    cout << "Enter the elements of the array: ";
+    for (int i = 0; i < n; i++)
     {
         cin >> arr[i];
     }
-
-    cout << "Enter the search element: ";
-    cin >> search;
-
-    for(int i = 0; i < num; i++)
+    cout << "Enter the key element: ";
+    cin >> key;
+    int first = binarySearchFirst(arr, 0, n - 1, key);
+    if (first == -1)
     {
-        if(arr[i] == search)
-        {
-            flag = true;
-        }
-        count++;
-    }
-
-    if(flag == false)
-    {
-        cout << "element is not found...";
+        cout << "Key element not found in the array" << endl;
     }
     else
     {
-        cout << "Congratulation..." << endl;
-        cout << "element is found after " << count << " number of comparesions..." << endl;
+        int last = binarySearchLast(arr, 0, n - 1, key);
+        int count = last - first + 1;
+        cout << "Key element found " << count << " times in the array" << endl;
     }
-
     return 0;
 }
-

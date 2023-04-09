@@ -1,56 +1,45 @@
-/* Given an already sorted array of positive integers, design an algorithm and implement it using a program to find whether given key element is present in the array or not. Also, find total number of comparisons for each input case. (Time Complexity = O(logn), where n is the size of input). */
+// Given a sorted array of positive integers, design an algorithm and implement it using a program to find three indices i, j, k such that arr[i] + arr[j] = arr[k].
 
 #include <iostream>
+#include <vector>
 using namespace std;
-
-int binarySearch(int arr[], int low, int high, int key)
-{
-    int result = -1;
-    while (low <= high)
-    {
-        int mid = low + (high - low) / 2;
-        if (arr[mid] == key)
-        {
-            result = mid;
-            break;
-        }
-        else if (arr[mid] < key)
-        {
-            low = mid + 1;
-        }
-        else
-        {
-            high = mid - 1;
-        }
-    }
-    return result;
-}
 
 int main()
 {
-    bool flag = false;
-    int count = 0, search, num, arr[20];
-    cout << "Enter the number of element: ";
-    cin >> num;
+    vector<int> vt;
+    vector<int> num;
+    int x, numr;
 
-    cout << "Enter the nonnegative integers: ";
-    for(int i = 0; i < num; i++)
+    cout << "Enter the number of elements: ";
+    cin >> numr;
+
+    cout << "Enter the elements in sorted order: ";
+    for (int  i = 0; i < numr; i++)
     {
-        cin >> arr[i];
+        cin >> x;
+        vt.push_back(x);
     }
 
-    cout << "Enter the search element: ";
-    cin >> search;
-    int ans = binarySearch(arr, 0, num-1, search);
-    
-    if(ans == -1)
+    for(int i = 0; i < vt.size(); i++)
     {
-        cout << "element is not present...";
+        for(int j = i + 1; j < vt.size(); j++)
+        {
+            for(int k = j + 1; k < vt.size(); k++)
+            {
+                if(vt[i] + vt[j] == vt[k])
+                {
+                    num.push_back(i);
+                    num.push_back(j);
+                    num.push_back(k);
+                }
+            }
+        }
     }
-    else
+
+    cout << endl << "answer: " << endl;
+    for(int i = 0; i < num.size(); i++)
     {
-        cout << "Congratulation..." << endl;
-        cout << "element is found after " << count << " number of comparesions..." << endl;
+        cout << num[i] << " ";
     }
 
     return 0;
