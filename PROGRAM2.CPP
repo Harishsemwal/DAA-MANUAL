@@ -1,46 +1,57 @@
-// Given a sorted array of positive integers, design an algorithm and implement it using a program to find three indices i, j, k such that arr[i] + arr[j] = arr[k].
+/* Given an unsorted array of integers, design an algorithm and implement a program to sort this array using selection sort. Your program should also find number of comparisons and number of swaps required. */
 
 #include <iostream>
-#include <vector>
 using namespace std;
+
+int selectionSort(int nums[], int num, int index)
+{
+    int smallIndex = index;
+    int mini = nums[index];
+
+    for(int i = index + 1; i < num ; i++)
+    {
+        if(mini > nums[i])
+        {
+            mini = nums[i];
+            smallIndex = i;
+        }
+    }
+    return smallIndex;
+}
 
 int main()
 {
-    vector<int> vt;
-    vector<int> num;
-    int x, numr;
+    int testcase, count = 0;
+    int num, nums[20];
 
-    cout << "Enter the number of elements: ";
-    cin >> numr;
+    cout << "Enter the total number of testcase: ";
+    cin >> testcase;
 
-    cout << "Enter the elements in sorted order: ";
-    for (int  i = 0; i < numr; i++)
+    while(testcase--)
     {
-        cin >> x;
-        vt.push_back(x);
-    }
+        cout << "Enter the number of element: ";
+        cin >> num;
 
-    for(int i = 0; i < vt.size(); i++)
-    {
-        for(int j = i + 1; j < vt.size(); j++)
+        cout << "Enter the elements: ";
+        for(int i = 0; i < num; i++)
         {
-            for(int k = j + 1; k < vt.size(); k++)
-            {
-                if(vt[i] + vt[j] == vt[k])
-                {
-                    num.push_back(i);
-                    num.push_back(j);
-                    num.push_back(k);
-                }
-            }
+            cin >> nums[i];
         }
-    }
 
-    cout << endl << "answer: " << endl;
-    for(int i = 0; i < num.size(); i++)
-    {
-        cout << num[i] << " ";
-    }
+        //Selection sort
+        for(int i = 0; i < num; i++)
+        {
+            int ans = selectionSort(nums, num, i);
+            swap(nums[i], nums[ans]);
+        }
 
-    return 0;
+        cout << "The elements will be sorted after ("<< count <<") number of comparisions..." << endl;
+        cout << "Sorted elements is: " << endl;
+        for(int i = 0; i < num; i++)
+        {
+            cout << nums[i] << " ";
+        }
+
+        return 0;
+    }
 }
