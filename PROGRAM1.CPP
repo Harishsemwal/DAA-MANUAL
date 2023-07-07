@@ -1,75 +1,77 @@
-/* I. Given an unsorted array of alphabets containing duplicate elements. Design an algorithm and implement it using a program to find which alphabet has maximum number of occurrences and print it. (Time Complexity = O(n)) (Hint: Use counting sort) */
+// Given a sorted array of positive integers containing few duplicate elements, design an algorithm and implement it using a program to find whether the given key element is present in the array or not. If present, then also find the number of copies of given key. (Time Complexity = O(log n)).
+
 #include <iostream>
 using namespace std;
 
-void countingSort(int arr[], int num)
+int binarySearchFirst(int arr[], int low, int high, int key)
 {
-    int maxi = -1;
-    for(int i = 0; i < num; i++)
+    int result = -1;
+    while (low <= high)
     {
-        if(arr[i] > maxi)
+        int mid = low + (high - low) / 2;
+        if (arr[mid] == key)
         {
-            maxi = arr[i];
+            result = mid;
+            high = mid - 1;
+        }
+        else if (arr[mid] < key)
+        {
+            low = mid + 1;
+        }
+        else
+        {
+            high = mid - 1;
         }
     }
+    return result;
+}
 
-    cout <<"maxi: " << maxi << endl;
-
-    int count[maxi];
-    int postion[num];
-    int output[num];
-
-    for(int i = 0; i < maxi; i++)
+int binarySearchLast(int arr[], int low, int high, int key)
+{
+    int result = -1;
+    while (low <= high)
     {
-        count[i] = 0;
+        int mid = low + (high - low) / 2;
+        if (arr[mid] == key)
+        {
+            result = mid;
+            low = mid + 1;
+        }
+        else if (arr[mid] < key)
+        {
+            low = mid + 1;
+        }
+        else
+        {
+            high = mid - 1;
+        }
     }
-
-    for(int i = 0; i < num; i++)
-    {
-        count[arr[i]]++;
-    }
-
-    for(int i = 1; i < num; i++)
-    {
-        count[i] = count[i] + count[i-1];
-    }
-    for(int i = 0; i < num; i++)
-    {
-        output[--postion[arr[i]]] = arr[i];
-    }
-
-    for(int i = 0; i < num ;i++)
-    {
-        arr[i] = count[i];
-    }
-
+    return result;
 }
 
 int main()
 {
-    int testcase, count = 0;
-    int num, nums[20];
-
-    cout << "Enter the total number of testcase: ";
-    cin >> testcase;
-
-    while(testcase--)
+    int n, key;
+    cout << "Enter the number of elements in the array: ";
+    cin >> n;
+    int arr[n];
+    cout << "Enter the elements of the array: ";
+    for (int i = 0; i < n; i++)
     {
-        cout << "Enter the number of element: ";
-        cin >> num;
-
-        cout << "Enter the elements: ";
-        for(int i = 0; i < num; i++)
-        {
-            cin >> nums[i];
-        }
-
-        countingSort(nums, num);
-
-        cout << "the sorted elements is: " << endl;
-        for(int i = 0; i < num; i++)
-        {
-            cout << nums[i] << " ";
-        }
+        cin >> arr[i];
     }
+    cout << "Enter the key element: ";
+    cin >> key;
+    int first = binarySearchFirst(arr, 0, n - 1, key);
+    if (first == -1)
+    {
+        cout << "Key element not found in the array" << endl;
+    }
+    else
+    {
+        int last = binarySearchLast(arr, 0, n - 1, key);
+        int count = last - first + 1;
+        cout << "Key element found " << count << " times in the array" << endl;
+    }
+    return 0;
 }

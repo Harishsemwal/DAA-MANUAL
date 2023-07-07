@@ -1,69 +1,46 @@
-/* Given an unsorted array of integers, design an algorithm and implement it using a program to find whether two elements exist such that their sum is equal to the given key element. (Time
-Complexity = O(n log n)) */
+// Given a sorted array of positive integers, design an algorithm and implement it using a program to find three indices i, j, k such that arr[i] + arr[j] = arr[k].
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
 using namespace std;
-
-bool findPairs(int nums[], int num, int key, int store[])
-{
-    int left = 0; 
-    int right = num - 1;
-
-    while(left < right)
-    {
-        sort(nums, nums + num);
-
-        if(nums[left] + nums[right] == key)
-        {
-            store[0] = nums[left];
-            store[1] = nums[right];
-            return true;
-        }
-        else if(nums[left]+ nums[right] < key)
-        {
-            left++;
-        }
-        else
-        {
-            right--;
-        }
-    }
-}
 
 int main()
 {
-    int testcase;
-    int num, nums[20];
+    vector<int> vt;
+    vector<int> num;
+    int x, numr;
 
-    cout << "Enter the total number of testcase: ";
-    cin >> testcase;
+    cout << "Enter the number of elements: ";
+    cin >> numr;
 
-    while(testcase--)
+    cout << "Enter the elements in sorted order: ";
+    for (int  i = 0; i < numr; i++)
     {
-        cout << "Enter the number of element: ";
-        cin >> num;
-
-        cout << "Enter the elements: ";
-        for(int i = 0; i < num; i++)
-        {
-            cin >> nums[i];
-        }
-
-        int key, store[2];
-        cout << "Enter the key element: ";
-        cin >> key;
-
-        bool ans = findPairs(nums, num, key, store);
-
-        if(ans)
-        {
-        cout << "pair: " << store[0] <<" " << store[1] << endl;
-        }
-        else
-        {
-            cout << "Pairs not exits..." << endl;
-        }
-
-        return 0;
+        cin >> x;
+        vt.push_back(x);
     }
+
+    for(int i = 0; i < vt.size(); i++)
+    {
+        for(int j = i + 1; j < vt.size(); j++)
+        {
+            for(int k = j + 1; k < vt.size(); k++)
+            {
+                if(vt[i] + vt[j] == vt[k])
+                {
+                    num.push_back(i);
+                    num.push_back(j);
+                    num.push_back(k);
+                }
+            }
+        }
+    }
+
+    cout << endl << "answer: " << endl;
+    for(int i = 0; i < num.size(); i++)
+    {
+        cout << num[i] << " ";
+    }
+
+    return 0;
 }
